@@ -439,6 +439,8 @@ result = eval(polydisc)
 """
 abstract type PolydiscFunctionEvaluator{S, T, N} end
 
+(eval::PolydiscFunctionEvaluator)(pts::AbstractVector{<:AbstractPolydisk}) = map(eval, pts)
+
 # --- LinearPolynomial Evaluator ---
 @doc raw"""
     LinearPolynomialEvaluator{S,T,N}
