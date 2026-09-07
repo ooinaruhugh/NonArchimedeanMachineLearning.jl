@@ -20,7 +20,7 @@ f = LinearAbsolutePolynomialSum([l1, l2, l3])
 VP = ValuationPolydisc{ValuedFieldPoint{2,20,PadicFieldElem}, Int, 3}
 batch_eval = batch_evaluate_init(f, VP)
 loss = Loss(
-    params -> map(batch_eval, params),
+    batch_eval,
     vs -> [directional_derivative(batch_eval, v) for v in vs],
 )
 
