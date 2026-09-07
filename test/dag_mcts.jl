@@ -265,7 +265,7 @@ using NonArchimedeanMachineLearning
             return batch_eval(params)
         end
         function loss_grad(vs::Vector)
-            return [directional_derivative(poly, v) for v in vs]
+            return directional_derivative(batch_eval, vs)
         end
         loss = Loss(loss_eval, loss_grad)
 
@@ -306,7 +306,7 @@ using NonArchimedeanMachineLearning
             return batch_eval(params)
         end
         function loss_grad(vs::Vector)
-            return [directional_derivative(poly, v) for v in vs]
+            return directional_derivative(batch_eval, vs)
         end
         loss = Loss(loss_eval, loss_grad)
 
@@ -381,7 +381,7 @@ using NonArchimedeanMachineLearning
             return batch_eval(params)
         end
         function loss_grad(vs::Vector)
-            return [directional_derivative(poly, v) for v in vs]
+            return directional_derivative(batch_eval, vs)
         end
         loss = Loss(loss_eval, loss_grad)
 
@@ -428,7 +428,7 @@ using NonArchimedeanMachineLearning
             return batch_eval(params)
         end
         function mcts_loss_grad(vs::Vector)
-            return [directional_derivative(poly, v) for v in vs]
+            return directional_derivative(batch_eval, vs)
         end
         loss = Loss(mcts_loss_eval, mcts_loss_grad)
 
@@ -621,7 +621,7 @@ using NonArchimedeanMachineLearning
 
         loss_low = Loss(
             batch_eval_low,
-            vs -> [directional_derivative(poly_low, v) for v in vs]
+            vs -> directional_derivative(batch_eval_low, vs)
         )
 
         initial_p = ValuationPolydisc([K_low(0)], [0])
@@ -650,7 +650,7 @@ using NonArchimedeanMachineLearning
 
         loss_low = Loss(
             batch_eval_low,
-            vs -> [directional_derivative(poly_low, v) for v in vs]
+            vs -> directional_derivative(batch_eval_low, vs)
         )
 
         initial_p = ValuationPolydisc([K_low(0)], [0])
@@ -682,7 +682,7 @@ using NonArchimedeanMachineLearning
 
         loss_low = Loss(
             batch_eval_low,
-            vs -> [directional_derivative(poly_low, v) for v in vs]
+            vs -> directional_derivative(batch_eval_low, vs)
         )
 
         initial_p = ValuationPolydisc([K_low(0)], [0])
@@ -717,7 +717,7 @@ using NonArchimedeanMachineLearning
 
         loss_low = Loss(
             batch_eval_low,
-            vs -> [directional_derivative(poly_low, v) for v in vs]
+            vs -> directional_derivative(batch_eval_low, vs)
         )
 
         initial_p = ValuationPolydisc([K_low(0)], [0])
@@ -754,7 +754,7 @@ using NonArchimedeanMachineLearning
 
         loss_low = Loss(
             batch_eval_low,
-            vs -> [directional_derivative(poly_low, v) for v in vs]
+            vs -> directional_derivative(batch_eval_low, vs)
         )
 
         initial_p = ValuationPolydisc([K_low(0)], [0])
