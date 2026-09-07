@@ -82,7 +82,7 @@ function make_ordinary_least_squares_loss(data::Vector{Tuple{
     function loss_grad(vs::Vector{<:ValuationTangent})
         isempty(vs) && return Float64[]
         batch_eval = batch_evaluate_init(loss_function, typeof(first(vs).point))
-        return [directional_derivative(batch_eval, v) for v in vs]
+        return directional_derivative(batch_eval, vs)
     end
 
     return Loss(loss_eval, loss_grad)
@@ -133,7 +133,7 @@ function solve_linear_system(A::Matrix{S}, b::Vector{S}, y::Vector{S})::Loss whe
     function loss_grad(vs::Vector{<:ValuationTangent})
         isempty(vs) && return Float64[]
         batch_eval = batch_evaluate_init(loss_function, typeof(first(vs).point))
-        return [directional_derivative(batch_eval, v) for v in vs]
+        return directional_derivative(batch_eval, vs)
     end
 
     return Loss(loss_eval, loss_grad)

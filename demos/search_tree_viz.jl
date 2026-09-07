@@ -21,7 +21,7 @@ VP = ValuationPolydisc{ValuedFieldPoint{2,20,PadicFieldElem}, Int, 3}
 batch_eval = batch_evaluate_init(f, VP)
 loss = Loss(
     batch_eval,
-    vs -> [directional_derivative(batch_eval, v) for v in vs],
+    vs -> directional_derivative(batch_eval, vs),
 )
 
 # Initial parameter polydisc for (a, b, c)
