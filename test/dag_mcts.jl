@@ -262,7 +262,7 @@ using NonArchimedeanMachineLearning
             poly, ValuationPolydisc{ValuedFieldPoint{2, 20, PadicFieldElem}, Int64, 1})
 
         function loss_eval(params::Vector)
-            return [batch_eval(p) for p in params]
+            return batch_eval(params)
         end
         function loss_grad(vs::Vector)
             return [directional_derivative(poly, v) for v in vs]
@@ -303,7 +303,7 @@ using NonArchimedeanMachineLearning
             poly, ValuationPolydisc{ValuedFieldPoint{2, 20, PadicFieldElem}, Int64, 1})
 
         function loss_eval(params::Vector)
-            return [batch_eval(p) for p in params]
+            return batch_eval(params)
         end
         function loss_grad(vs::Vector)
             return [directional_derivative(poly, v) for v in vs]
@@ -378,7 +378,7 @@ using NonArchimedeanMachineLearning
             poly, ValuationPolydisc{ValuedFieldPoint{2, 20, PadicFieldElem}, Int64, 1})
 
         function loss_eval(params::Vector)
-            return [batch_eval(p) for p in params]
+            return batch_eval(params)
         end
         function loss_grad(vs::Vector)
             return [directional_derivative(poly, v) for v in vs]
@@ -425,7 +425,7 @@ using NonArchimedeanMachineLearning
             poly, ValuationPolydisc{ValuedFieldPoint{2, 20, PadicFieldElem}, Int64, 1})
 
         function mcts_loss_eval(params::Vector)
-            return [batch_eval(p) for p in params]
+            return batch_eval(params)
         end
         function mcts_loss_grad(vs::Vector)
             return [directional_derivative(poly, v) for v in vs]
@@ -620,7 +620,7 @@ using NonArchimedeanMachineLearning
         batch_eval_low = batch_evaluate_init(poly_low, PT)
 
         loss_low = Loss(
-            params -> [batch_eval_low(p) for p in params],
+            batch_eval_low,
             vs -> [directional_derivative(poly_low, v) for v in vs]
         )
 
@@ -649,7 +649,7 @@ using NonArchimedeanMachineLearning
         batch_eval_low = batch_evaluate_init(poly_low, PT)
 
         loss_low = Loss(
-            params -> [batch_eval_low(p) for p in params],
+            batch_eval_low,
             vs -> [directional_derivative(poly_low, v) for v in vs]
         )
 
@@ -681,7 +681,7 @@ using NonArchimedeanMachineLearning
         batch_eval_low = batch_evaluate_init(poly_low, PT)
 
         loss_low = Loss(
-            params -> [batch_eval_low(p) for p in params],
+            batch_eval_low,
             vs -> [directional_derivative(poly_low, v) for v in vs]
         )
 
@@ -716,7 +716,7 @@ using NonArchimedeanMachineLearning
         batch_eval_low = batch_evaluate_init(poly_low, PT)
 
         loss_low = Loss(
-            params -> [batch_eval_low(p) for p in params],
+            batch_eval_low,
             vs -> [directional_derivative(poly_low, v) for v in vs]
         )
 
@@ -753,7 +753,7 @@ using NonArchimedeanMachineLearning
         batch_eval_low = batch_evaluate_init(poly_low, PT)
 
         loss_low = Loss(
-            params -> [batch_eval_low(p) for p in params],
+            batch_eval_low,
             vs -> [directional_derivative(poly_low, v) for v in vs]
         )
 

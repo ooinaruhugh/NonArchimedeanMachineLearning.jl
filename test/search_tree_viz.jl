@@ -20,7 +20,7 @@ function _make_loss(K)
     batch_eval = batch_evaluate_init(poly, ValuationPolydisc{
         ValuedFieldPoint{2, 20, PadicFieldElem}, Int64, 1})
     Loss(
-        params -> [batch_eval(p) for p in params],
+        batch_eval,
         vs -> [directional_derivative(poly, v) for v in vs]
     )
 end
@@ -115,8 +115,7 @@ end
             poly = AbsolutePolynomialSum([x^2 + y^2])
             VP = ValuationPolydisc{ValuedFieldPoint{2, 20, PadicFieldElem}, Int64, 2}
             be = batch_evaluate_init(poly, VP)
-            Loss(ps -> [be(p) for p in ps], vs -> [directional_derivative(poly, v)
-                                                   for v in vs])
+            Loss(be, vs -> [directional_derivative(poly, v) for v in vs])
         end
         optim = dag_mcts_descent_init(p_root, loss, config)
         step!(optim)
