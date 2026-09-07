@@ -1097,6 +1097,14 @@ end
  Directional Derivatives for Typed Evaluators
 =============================================================================#
 
+function directional_derivative(
+    eval::PolydiscFunctionEvaluator{S,T,N},
+    vs::AbstractVector{<:ValuationTangent{S,T,N}}
+) where {S,T,N}
+  return map(v -> directional_derivative(eval, v), vs)
+end
+
+
 function directional_derivative(eval::ConstantEvaluator{S, T, N}, v::ValuationTangent{
         S, T, N}) where {S, T, N}
     return 0.0
