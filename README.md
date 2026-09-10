@@ -48,7 +48,7 @@ loss  = Loss(params -> map(batch, params), _ -> 0)
 initial_param = VP((K(1),), (0,))
 
 # Initialize an optimizer (e.g. Greedy Descent) and run
-optim = greedy_descent_init(initial_param, loss, 1, (false, 1))
+optim = greedy_descent_init(initial_param, loss, 1, GreedyDescentConfig(strict=false, degree=1))
 for _ in 1:60
     step!(optim)
     has_converged(optim) && break

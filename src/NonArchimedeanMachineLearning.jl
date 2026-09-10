@@ -83,13 +83,13 @@ export eval_loss, update_param!, step!, has_converged, optimize!
 export MSE_loss_init, MPE_loss_init
 
 # From optimization/optimizers/greedy_descent.jl
-export greedy_descent, greedy_descent_init
+export greedy_descent, greedy_descent_init, GreedyDescentConfig
 
 # From optimization/optimizers/random_descent.jl (BASELINE ONLY - for experimental comparison)
 export random_descent, random_descent_init
 
 # From optimization/optimizers/gradient_descent.jl
-export gradient_param, gradient_descent, gradient_descent_init
+export gradient_param, gradient_descent, gradient_descent_init, GradientDescentConfig
 
 # From optimization/optimizers/tree_search/value_transforms.jl
 export sigmoid_transform, tanh_transform, negation_transform, inverse_transform

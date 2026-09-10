@@ -53,7 +53,7 @@ n_steps = 60
 
 # ── Greedy Descent ────────────────────────────────────────────────────────────
 
-greedy_optim = greedy_descent_init(initial_param, loss, 1, (false, 1))
+greedy_optim = greedy_descent_init(initial_param, loss, 1, GreedyDescentConfig(strict=false, degree=1)
 greedy_loss, greedy_param = run_optimizer(greedy_optim, n_steps)
 
 # ── MCTS ──────────────────────────────────────────────────────────────────────

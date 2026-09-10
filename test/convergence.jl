@@ -24,7 +24,7 @@ using NonArchimedeanMachineLearning
     param0 = ValuationPolydisc([K(0)], [0])
 
     @testset "has_converged accessor" begin
-        optim = greedy_descent_init(param0, loss, 1, (false, 1))
+        optim = greedy_descent_init(param0, loss, 1, GreedyDescentConfig(strict=false, degree=1))
         @test has_converged(optim) == false
 
         # Manually set converged flag
@@ -33,7 +33,7 @@ using NonArchimedeanMachineLearning
     end
 
     @testset "Greedy descent convergence at precision boundary" begin
-        optim = greedy_descent_init(param0, loss, 1, (false, 1))
+        optim = greedy_descent_init(param0, loss, 1, GreedyDescentConfig(strict=false, degree=1))
         converged = false
         steps = 0
         for i in 1:100
@@ -51,7 +51,7 @@ using NonArchimedeanMachineLearning
     end
 
     @testset "optimize! returns early on convergence" begin
-        optim = greedy_descent_init(param0, loss, 1, (false, 1))
+        optim = greedy_descent_init(param0, loss, 1, GreedyDescentConfig(strict=false, degree=1))
         steps = optimize!(optim, 100)
         @test has_converged(optim) == true
         @test steps <= prec + 1
@@ -67,7 +67,7 @@ using NonArchimedeanMachineLearning
         loss_high = MSE_loss_init(model_high, data_high)
         param_high = ValuationPolydisc([K_high(0)], [0])
 
-        optim = greedy_descent_init(param_high, loss_high, 1, (false, 1))
+        optim = greedy_descent_init(param_high, loss_high, 1, GreedyDescentConfig(strict=false, degree=1))
         steps = optimize!(optim, 3)
         @test steps == 3
         @test has_converged(optim) == false

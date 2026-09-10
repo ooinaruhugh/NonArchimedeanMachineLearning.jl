@@ -20,6 +20,10 @@ optim = greedy_descent_init(param, loss, 1, config)
 struct GreedyDescentConfig
     strict::Bool
     degree::Int
+
+    function GreedyDescentConfig(; strict::Bool, degree::Int)
+        new(strict, degree)
+    end
 end
 
 @doc raw"""
@@ -46,7 +50,6 @@ function greedy_descent(
         next_branch::Int,
         settings::GreedyDescentConfig
 ) where {S, T, N}
-    (strict, degree) = settings
     if settings.strict
         below_nodes = children_along_branch(param, next_branch)
         next_branch = next_branch == dim(param) ? 1 : next_branch + 1

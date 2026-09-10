@@ -199,7 +199,7 @@ early convergence from hitting `max_steps`.
 
 # Example
 ```julia
-optim = greedy_descent_init(param, loss, 1, (false, 1))
+optim = greedy_descent_init(param, loss, 1, GreedyDescentConfig(strict=false, degree=1))
 steps = optimize!(optim, 100; verbose=true)
 if has_converged(optim)
     println("Converged after \$steps steps")
