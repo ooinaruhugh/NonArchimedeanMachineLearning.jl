@@ -3,6 +3,26 @@ Greedy local descent optimizer over the children of the current polydisc.
 """
 
 @doc raw"""
+    GreedyDescentConfig
+
+Configuration for greedy descent optimization.
+
+# Fields
+- `strict::Bool`: If true, descend one coordinate at a time; if false, descend all coordinates
+- `degree::Int`: Number of children to explore per polydisc node
+
+# Example
+```julia
+config = GreedyDescentConfig(strict=false, degree=1)
+optim = greedy_descent_init(param, loss, 1, config)
+```
+"""
+struct GreedyDescentConfig
+    strict::Bool
+    degree::Int
+end
+
+@doc raw"""
     greedy_descent(loss::Loss, param::ValuationPolydisc{S,T,N}, next_branch::Int, settings::Tuple{Bool,Int}) where {S,T,N}
 
 Perform one step of greedy descent optimization.
@@ -14,7 +34,7 @@ Can operate in strict mode (one coordinate at a time) or full mode (all coordina
 - `loss::Loss`: The loss function structure
 - `param::ValuationPolydisc{S,T,N}`: Current parameter values
 - `next_branch::Int`: Index of next branch to descend (in strict mode)
-- `settings::Tuple{Bool,Int}`: `(strict, degree)` where `strict` enables single-coordinate descent
+- `settings::GreedyDescentConfig`: Configuration for greedy descent
 
 # Returns
 `Tuple{ValuationPolydisc{S,T,N}, Int, Bool}`: New parameters, next branch index,
@@ -24,14 +44,14 @@ function greedy_descent(
         loss::Loss,
         param::ValuationPolydisc{S, T, N},
         next_branch::Int,
-        settings::Tuple{Bool, Int}
+        settings::GreedyDescentConfig
 ) where {S, T, N}
     (strict, degree) = settings
-    if strict
+    if settings.strict
         below_nodes = children_along_branch(param, next_branch)
         next_branch = next_branch == dim(param) ? 1 : next_branch + 1
     else
-        below_nodes = children(param, degree)
+        below_nodes = children(param, settings.degree)
     end
     isempty(below_nodes) && return (param, next_branch, true)
     # In greedy descent, we look at the children of the
@@ -61,7 +81,7 @@ function greedy_descent_init(
         param::ValuationPolydisc{S, T, N},
         loss::Loss,
         next_branch::Int,
-        settings::Tuple{Bool, Int}
+        settings::GreedyDescentConfig
 ) where {S, T, N}
     return OptimSetup(
         loss,
