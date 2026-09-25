@@ -38,8 +38,9 @@ Supertype of all optimizer configurations (e.g. `GreedyDescentConfig`,
 `GradientDescentConfig`, `RandomDescentConfig`, `DOOConfig`, `MCTSConfig`,
 `DAGMCTSConfig`).
 
-Configurations of optimizers that descend along the children of a polydisc
-provide the fields `strict::Bool`, `degree::Int` and `start_branch::Int`.
+All configurations provide a `degree::Int` field. Configurations of optimizers
+that support strict (single-branch) descent, i.e. all of the above except
+`DAGMCTSConfig`, additionally provide `strict::Bool` and `start_branch::Int`.
 """
 abstract type AbstractOptimConfig end
 
