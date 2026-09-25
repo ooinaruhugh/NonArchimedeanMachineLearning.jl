@@ -3,31 +3,39 @@ Greedy local descent optimizer over the children of the current polydisc.
 """
 
 @doc raw"""
-    GreedyDescentConfig
+    GreedyDescentConfig(; strict=false, degree=1, start_branch=1)
 
 Configuration for greedy descent optimization.
 
 # Fields
 - `strict::Bool`: If true, descend one coordinate at a time; if false, descend all coordinates
-- `degree::Int`: Number of children to explore per polydisc node
+- `degree::Int`: Number of children to explore per polydisc node (non-strict mode)
+- `start_branch::Int`: Coordinate to descend along first (strict mode)
 
 # Example
 ```julia
-config = GreedyDescentConfig(strict=false, degree=1)
-optim = greedy_descent_init(param, loss, 1, config)
+config = GreedyDescentConfig(strict = false, degree = 1)
+optim = greedy_descent_init(param, loss, config)
 ```
 """
-struct GreedyDescentConfig
+struct GreedyDescentConfig <: AbstractOptimConfig
     strict::Bool
     degree::Int
+    start_branch::Int
 
-    function GreedyDescentConfig(; strict::Bool, degree::Int)
-        new(strict, degree)
+    function GreedyDescentConfig(;
+            strict::Bool = false,
+            degree::Int = 1,
+            start_branch::Int = 1
+    )
+        @req degree >= 1 "degree must be positive"
+        @req start_branch >= 1 "start_branch must be positive"
+        new(strict, degree, start_branch)
     end
 end
 
 @doc raw"""
-    greedy_descent(loss::Loss, param::ValuationPolydisc{S,T,N}, next_branch::Int, settings::Tuple{Bool,Int}) where {S,T,N}
+    greedy_descent(loss::Loss, param::ValuationPolydisc{S,T,N}, next_branch::Int, settings::GreedyDescentConfig) where {S,T,N}
 
 Perform one step of greedy descent optimization.
 
@@ -50,12 +58,7 @@ function greedy_descent(
         next_branch::Int,
         settings::GreedyDescentConfig
 ) where {S, T, N}
-    if settings.strict
-        below_nodes = children_along_branch(param, next_branch)
-        next_branch = next_branch == dim(param) ? 1 : next_branch + 1
-    else
-        below_nodes = children(param, settings.degree)
-    end
+    below_nodes, next_branch = _descent_candidates(param, next_branch, settings)
     isempty(below_nodes) && return (param, next_branch, true)
     # In greedy descent, we look at the children of the
     # current parameter point and take the child
@@ -67,15 +70,14 @@ function greedy_descent(
 end
 
 @doc raw"""
-    greedy_descent_init(param::ValuationPolydisc{S,T,N}, loss::Loss, next_branch::Int, settings::Tuple{Bool,Int}) where {S,T,N}
+    greedy_descent_init(param::ValuationPolydisc{S,T,N}, loss::Loss, settings::GreedyDescentConfig=GreedyDescentConfig()) where {S,T,N}
 
 Initialize an optimization setup for greedy descent.
 
 # Arguments
 - `param::ValuationPolydisc{S,T,N}`: Initial parameter values
 - `loss::Loss`: The loss function structure
-- `next_branch::Int`: Starting branch index for strict mode (typically 1)
-- `settings::Tuple{Bool,Int}`: `(strict, degree)` controlling descent behavior
+- `settings::GreedyDescentConfig`: Configuration controlling descent behavior
 
 # Returns
 `OptimSetup`: Configured optimization setup for greedy descent
@@ -83,14 +85,14 @@ Initialize an optimization setup for greedy descent.
 function greedy_descent_init(
         param::ValuationPolydisc{S, T, N},
         loss::Loss,
-        next_branch::Int,
-        settings::GreedyDescentConfig
+        settings::GreedyDescentConfig = GreedyDescentConfig()
 ) where {S, T, N}
+    @req settings.start_branch <= N "start_branch must be at most the dimension of the polydisc"
     return OptimSetup(
         loss,
         param,
         (l, p, st, ctx) -> greedy_descent(l, p, st, ctx),
-        next_branch,
+        settings.start_branch,
         settings,
         false
     )
