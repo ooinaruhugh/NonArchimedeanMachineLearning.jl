@@ -48,7 +48,7 @@ loss  = Loss(params -> map(batch, params), _ -> 0)
 initial_param = VP((K(1),), (0,))
 
 # Initialize an optimizer (e.g. Greedy Descent) and run
-optim = greedy_descent_init(initial_param, loss, 1, GreedyDescentConfig(strict=false, degree=1))
+optim = greedy_descent_init(initial_param, loss, GreedyDescentConfig())
 for _ in 1:60
     step!(optim)
     has_converged(optim) && break
@@ -67,7 +67,7 @@ mcts_optim = mcts_descent_init(initial_param, loss,
                degree=1, selection_mode=BestValue))
 
 # Deterministic Optimistic Optimization (DOO)
-doo_optim = doo_descent_init(initial_param, loss, 1,
+doo_optim = doo_descent_init(initial_param, loss,
     DOOConfig(delta=h -> 2.0^(-h), degree=1))
 ```
 
